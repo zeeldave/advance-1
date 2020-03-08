@@ -24,6 +24,9 @@ Limit your use of javascript or jQuery - jQuery is required for AJAX, but very l
 Use AJAX to get/send data to the controller  
 Please use plain javascript not typescript  
 
+**Don't add any new fields to the Models or add new fields to the documents in the database.**  
+For example,  don't add any new fields to the User or Job models.
+
 **Note : Make sure that you have Visual Studio 2017 installed in your computer.
 Visual Studio 2015 does not work with ReactJS**
 
