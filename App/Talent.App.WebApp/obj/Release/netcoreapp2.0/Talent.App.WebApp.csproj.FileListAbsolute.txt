@@ -1,0 +1,15 @@
+Z:\Competition-Task\App\Talent.App.WebApp\bin\Release\netcoreapp2.0\appsettings.Development.json
+Z:\Competition-Task\App\Talent.App.WebApp\bin\Release\netcoreapp2.0\appsettings.json
+Z:\Competition-Task\App\Talent.App.WebApp\bin\Release\netcoreapp2.0\bundleconfig.json
+Z:\Competition-Task\App\Talent.App.WebApp\bin\Release\netcoreapp2.0\Talent.App.WebApp.deps.json
+Z:\Competition-Task\App\Talent.App.WebApp\bin\Release\netcoreapp2.0\Talent.App.WebApp.runtimeconfig.json
+Z:\Competition-Task\App\Talent.App.WebApp\bin\Release\netcoreapp2.0\Talent.App.WebApp.runtimeconfig.dev.json
+Z:\Competition-Task\App\Talent.App.WebApp\bin\Release\netcoreapp2.0\Talent.App.WebApp.dll
+Z:\Competition-Task\App\Talent.App.WebApp\bin\Release\netcoreapp2.0\Talent.App.WebApp.pdb
+Z:\Competition-Task\App\Talent.App.WebApp\obj\Release\netcoreapp2.0\Talent.App.WebApp.csprojAssemblyReference.cache
+Z:\Competition-Task\App\Talent.App.WebApp\obj\Release\netcoreapp2.0\Talent.App.WebApp.AssemblyInfoInputs.cache
+Z:\Competition-Task\App\Talent.App.WebApp\obj\Release\netcoreapp2.0\Talent.App.WebApp.AssemblyInfo.cs
+Z:\Competition-Task\App\Talent.App.WebApp\obj\Release\netcoreapp2.0\Talent.App.WebApp.csproj.CoreCompileInputs.cache
+Z:\Competition-Task\App\Talent.App.WebApp\obj\Release\netcoreapp2.0\Talent.App.WebApp.dll
+Z:\Competition-Task\App\Talent.App.WebApp\obj\Release\netcoreapp2.0\Talent.App.WebApp.pdb
+Z:\Competition-Task\App\Talent.App.WebApp\obj\Release\netcoreapp2.0\Talent.App.WebApp.genruntimeconfig.cache
