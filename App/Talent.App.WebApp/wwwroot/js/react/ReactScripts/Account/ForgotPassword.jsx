@@ -32,9 +32,9 @@ export default class ForgotPassword extends React.Component {
         var forgotPasswordModel = { email: this.state.email };
 
         $.ajax({
-            url: 'http://competitiontask1identity.azurewebsites.net/authentication/authentication/forgetpassword',
+            // url: 'http://competitiontask1identity.azurewebsites.net/authentication/authentication/forgetpassword',
 
-            // url: 'http://localhost:60998/authentication/authentication/forgetpassword',
+            url: 'http://localhost:60998/authentication/authentication/forgetpassword',
 
 
             type: 'POST',
