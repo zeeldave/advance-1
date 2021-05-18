@@ -75,18 +75,21 @@ export default class AccountProfile extends React.Component {
                 'Content-Type': 'application/json'
             },
             type: "GET",
+            contentType: "application/json",
+            dataType: "json",
             success: function (res) {
                 this.updateWithoutSave(res.data)
             }.bind(this)
         })
         this.init()
     }
+
     //updates component's state without saving data
     updateWithoutSave(newValues) {
         let newProfile = Object.assign({}, this.state.profileData, newValues)
         this.setState({
             profileData: newProfile
-        })
+        }, () => console.log(this.state.profileData));
     }
 
     //updates component's state and saves data
@@ -94,7 +97,7 @@ export default class AccountProfile extends React.Component {
         let newProfile = Object.assign({}, this.state.profileData, newValues)
         this.setState({
             profileData: newProfile
-        }, this.saveProfile)
+        }, () => this.saveProfile())
     }
 
     updateForComponentId(componentId, newValues) {
@@ -103,6 +106,8 @@ export default class AccountProfile extends React.Component {
 
     saveProfile() {
         var cookies = Cookies.get('talentAuthToken');
+        console.log("this.state.profileData");
+        console.log(this.state.profileData);
         $.ajax({
             url: 'http://localhost:60290/profile/profile/updateTalentProfile',
             headers: {
@@ -153,6 +158,8 @@ export default class AccountProfile extends React.Component {
                                                 saveProfileData={this.updateAndSaveData}
                                             />
                                         </FormItemWrapper>
+
+
                                         <FormItemWrapper
                                             title='User Details'
                                             tooltip='Enter your contact details'
@@ -163,6 +170,21 @@ export default class AccountProfile extends React.Component {
                                                 componentId='contactDetails'
                                             />
                                         </FormItemWrapper>
+
+
+                                        <FormItemWrapper
+                                            title='Description'
+                                            tooltip='Please describe yourself'
+                                        >
+                                            <SelfIntroduction
+                                                summary={this.state.profileData.summary}
+                                                description={this.state.profileData.description}
+                                                updateProfileData={this.updateAndSaveData}
+                                                updateWithoutSave={this.updateWithoutSave}
+                                            />
+                                            </FormItemWrapper>
+
+
                                         <FormItemWrapper
                                             title='Address'
                                             tooltip='Enter your current address'>
@@ -253,9 +275,10 @@ export default class AccountProfile extends React.Component {
                                             hideSegment={true}
                                         >
                                             <PhotoUpload
-                                                imageId={this.state.profileData.profilePhotoUrl}
+                                                imageId={this.state.profileData.profilePhoto}
                                                 updateProfileData={this.updateWithoutSave}
-                                                savePhotoUrl='http://localhost:60290/profile/profile/updateProfilePhoto'
+                                                profilePhotoUrl={this.state.profileData.profilePhotoUrl}
+                                                savePhotoUrl={'http://localhost:60290/profile/profile/updateProfilePhoto'}
                                             />
                                         </FormItemWrapper>
                                         <FormItemWrapper
@@ -281,12 +304,6 @@ export default class AccountProfile extends React.Component {
                                                 saveCVUrl={'http://localhost:60290/profile/profile/updateTalentCV'}
                                             />
                                         </FormItemWrapper>
-                                        <SelfIntroduction
-                                            summary={this.state.profileData.summary}
-                                            description={this.state.profileData.description}
-                                            updateProfileData={this.updateAndSaveData}
-                                            updateWithoutSave={this.updateWithoutSave}
-                                        />
                                     </div>
                                 </form>
                             </div >

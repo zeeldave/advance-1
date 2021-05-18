@@ -11,44 +11,44 @@ export default class TalentFeed extends React.Component {
     constructor(props) {
         super(props);
 
-        //let loader = loaderData
-        //loader.allowedUsers.push("Employer")
-        //loader.allowedUsers.push("Recruiter")
+        let loader = loaderData
+        loader.allowedUsers.push("Employer")
+        loader.allowedUsers.push("Recruiter")
 
-        //this.state = {
-        //    loadNumber: 5,
-        //    loadPosition: 0,
-        //    feedData: [],
-        //    watchlist: [],
-        //    loaderData: loader,
-        //    loadingFeedData: false,
-        //    companyDetails: null
-        //}
+        this.state = {
+           loadNumber: 5,
+           loadPosition: 0,
+           feedData: [],
+           watchlist: [],
+           loaderData: loader,
+           loadingFeedData: false,
+           companyDetails: null
+        }
 
-        //this.init = this.init.bind(this);
+        this.init = this.init.bind(this);
 
     };
 
-    //init() {
-    //    let loader = TalentUtil.deepCopy(this.state.loaderData)
-    //    loader.isLoading = false
+    init() {
+       let loader = TalentUtil.deepCopy(this.state.loaderData)
+       loader.isLoading = false
 
 
-    //}
+    }
 
-    //componentDidMount() {
-    //    window.addEventListener('scroll', this.handleScroll);
-    //    this.init()
-    //};
+    componentDidMount() {
+       window.addEventListener('scroll', this.handleScroll);
+       this.init()
+    };
 
    
     render() {
        
 
-        //return (
-        //    <BodyWrapper reload={this.init} loaderData={this.state.loaderData}>
+        return (
+           <BodyWrapper reload={this.init} loaderData={this.state.loaderData}>
                
-        //    </BodyWrapper>
-        //)
+           </BodyWrapper>
+        )
     }
 }

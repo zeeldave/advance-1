@@ -189,6 +189,9 @@ namespace Talent.Common.Aws
             }
         }
 
+
+
+
         public async Task<bool> RemoveFileFromS3(string name, string bucketName)
         {
             DeleteObjectRequest deleteRequest = new DeleteObjectRequest

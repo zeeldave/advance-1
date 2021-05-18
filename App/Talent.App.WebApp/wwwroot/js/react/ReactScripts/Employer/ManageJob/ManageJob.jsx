@@ -205,7 +205,7 @@ export default class ManageJob extends React.Component {
                 <Accordion as={Menu} vertical>
                     <Menu.Item>
                         <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                    {/*      */}
+                   
                     <Icon name='dropdown' />
                     By Status
                     </Accordion.Title>
