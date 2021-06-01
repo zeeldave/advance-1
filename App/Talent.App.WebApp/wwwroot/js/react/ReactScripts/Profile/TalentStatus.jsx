@@ -1,70 +1,122 @@
-﻿import React from 'react';
-import { SingleInput } from '../Form/SingleInput.jsx';
-import { Container, Input, Dropdown, Button, Table, Form, Checkbox } from 'semantic-ui-react';
-
+﻿﻿import React from 'react'
+import { Form, Checkbox,Radio } from 'semantic-ui-react';
+import { CheckBox } from '../Form/CheckBox.jsx';
 export default class TalentStatus extends React.Component {
     constructor(props) {
         super(props);
+
+        const jobSeekingStatus = props.details.jobSeekingStatus ?
+            Object.assign({},this.props.details.jobSeekingStatus)
+            : {
+                status: "",
+                availableDate: ""
+              }
+
         this.state = {
-            value: ""
+            showEditSection: false,
+            status: this.props.details.jobSeekingStatus.status,
+          jobSeekingStatus: jobSeekingStatus
         }
 
-        this.handleChange = this.handleChange.bind(this);
+       this.renderDisplay = this.renderDisplay.bind(this)
+       this.handleChange = this.handleChange.bind(this)
+       this.saveContact = this.saveContact.bind(this) 
     }
 
-    handleChange(e, { value }) {
-        this.setState({ value: value })
+    componentDidUpdate(prevProps) {
+        /* console.log("componentDidUpdate") */
+        if (this.props.details !== prevProps.details) {
+            const details = Object.assign({}, this.props.details)
+            this.setState({
+                newContact: details,
+              //  status:this.props.details.jobSeekingStatus.status
+            })
+        }
+      }
+
+    handleChange(event){
+        console.log("handleChange triggered!!")
+        console.log(event)
+
+        const data = Object.assign({}, this.state.jobSeekingStatus)
+            data["status"] = event
+            data["availableDate"] = new Date()
+            this.setState({
+                jobSeekingStatus: data,
+                status:event
+            },this.saveContact)
+           console.log( this.state.jobSeekingStatus)
+
+    };
+
+    saveContact() {   
+        console.log("saveContact called!!")       
+       // const data = Object.assign({}, this.state.linkedAccounts)
+       const jobSeekingStatus = Object.assign({}, this.state.jobSeekingStatus)
+
+        const data = Object.assign({}, this.props.details)
+        data.jobSeekingStatus=jobSeekingStatus
+
+        console.log(data)
+        this.props.controlFunc(this.props.componentId, data)
     }
 
     render() {
         return (
-            <React.Fragment>
-                <div style={{margin: '20px'}} >
+            this.renderDisplay()
+        )  
+    }
+    renderDisplay() { 
+        let status = this.props.details.jobSeekingStatus? `: ${(this.props.details.jobSeekingStatus.status)}`:""
+     //  let status = this.state.newContact.jobSeekingStatus.status ? `: ${(this.state.newContact.jobSeekingStatus.status)}`:""
+        return (
+            <div className='row'>
+                <div className="ui sixteen wide column job-seeking">
+                    <Form>
+                    
                     <Form.Field>
-                        Selected value: <b>{this.state.value}</b>
-                    </Form.Field>
-                    <Form.Field>
-                        <Checkbox
-                            radio
-                            label='Actively looking for a job'
-                            name='checkboxRadioGroup'
-                            value='Actively looking for a job'
-                            checked={this.state.value === 'Actively looking for a job'}
-                            onChange={(e, d) => this.handleChange(e, d)}
-                        />
-                    </Form.Field>
-                    <Form.Field>
-                        <Checkbox
-                            radio
-                            label='Not looking for a job at the moment'
-                            name='checkboxRadioGroup'
-                            value='Not looking for a job at the moment'
-                            checked={this.state.value === 'Not looking for a job at the moment'}
-                            onChange={(e, d) => this.handleChange(e, d)}
-                        />
-                    </Form.Field>
-                    <Form.Field>
-                        <Checkbox
-                            radio
-                            label='Currently employed but open to job offer'
-                            name='checkboxRadioGroup'
-                            value='Currently employed but open to job offer'
-                            checked={this.state.value === 'Currently employed but open to job offer'}
-                            onChange={(e, d) => this.handleChange(e, d)}
-                        />
-                    </Form.Field>
-                    <Form.Field>
-                        <Checkbox
-                            radio
-                            label='Will be available on later date'
-                            name='checkboxRadioGroup'
-                            value='Will be available on later date'
-                            checked={this.state.value === 'Will be available on later date'}
-                            onChange={(e, d) => this.handleChange(e, d)}
-                        />
-                    </Form.Field>
+                            <b>Current Status{status}</b>
+                        </Form.Field>
+                        <Form.Field>
+                            <Radio
+                                label='Actively looking for job'
+                                name='radioGroup'
+                                value='Activelylookingforob'
+                                checked={this.state.status === 'Actively looking for job'}
+                                onChange={()=>this.handleChange('Actively looking for job')}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <Radio
+                                label='Not looking for a job at the moment'
+                                name='radioGroup'
+                                value='Notlookingforajobatthemoment'
+                                checked={this.state.status === 'Not looking for a job at the moment'}
+                                onChange={()=>this.handleChange('Not looking for a job at the moment')}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <Radio
+                                label='Currently employed but open to offers'
+                                name='radioGroup'
+                                value='Currentlyemployedbutopentooffers'
+                                checked={this.state.status === 'Currently employed but open to offers'}
+                                onChange={()=>this.handleChange('Currently employed but open to offers')}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <Radio
+                                label='will be available on later date'
+                                name='radioGroup'
+                                value='willbeavailableonlaterdate'
+                                checked={this.state.status === 'will be available on later date'}
+                                onChange={()=>this.handleChange('will be available on later date')}
+                            />
+                        </Form.Field>
+
+                    </Form>
                 </div>
-            </React.Fragment>
+            </div>
         )
     }
 }

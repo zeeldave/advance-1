@@ -217,8 +217,7 @@ export default class AccountProfile extends React.Component {
                                             tooltip='List your skills'
                                         >
                                             <Skill
-                                                skillData={this.state.profileData.skills}
-                                                updateProfileData={this.updateAndSaveData}
+                                                details={this.state.profileData}
                                             />
                                         </FormItemWrapper>
                                         <FormItemWrapper
@@ -226,8 +225,7 @@ export default class AccountProfile extends React.Component {
                                             tooltip='Add your work experience'
                                         >
                                             <Experience
-                                                experienceData={this.state.profileData.experience}
-                                                updateProfileData={this.updateAndSaveData}
+                                                details={this.state.profileData}
                                             />
                                         </FormItemWrapper>
                                         <FormItemWrapper
@@ -264,21 +262,20 @@ export default class AccountProfile extends React.Component {
                                             tooltip='What is your current status in jobseeking?'
                                         >
                                             <TalentStatus
-                                                status={this.state.profileData.jobSeekingStatus}
-                                                updateProfileData={this.updateWithoutSave}
-                                                saveProfileData={this.updateAndSaveData}
+                                                details={this.state.profileData}
+                                                controlFunc={this.updateForComponentId}
+                                                componentId='Status'
                                             />
                                         </FormItemWrapper>
-                                        <FormItemWrapper
+                                       <FormItemWrapper
                                             title='Profile Photo'
                                             tooltip='Please upload your profile photo'
                                             hideSegment={true}
                                         >
                                             <PhotoUpload
-                                                imageId={this.state.profileData.profilePhoto}
-                                                updateProfileData={this.updateWithoutSave}
-                                                profilePhotoUrl={this.state.profileData.profilePhotoUrl}
-                                                savePhotoUrl={'http://localhost:60290/profile/profile/updateProfilePhoto'}
+                                                details={this.state.profileData}
+                                            // updateProfileData={this.updateWithoutSave}
+
                                             />
                                         </FormItemWrapper>
                                         <FormItemWrapper

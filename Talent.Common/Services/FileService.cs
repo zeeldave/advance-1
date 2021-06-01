@@ -16,71 +16,111 @@ namespace Talent.Common.Services
         private readonly IHostingEnvironment _environment;
         private readonly string _tempFolder;
         private IAwsService _awsService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FileService(IHostingEnvironment environment, 
-            IAwsService awsService)
+        public FileService(IHostingEnvironment environment,
+            IAwsService awsService, IHttpContextAccessor httpContextAccessor)
         {
             _environment = environment;
-            _tempFolder = "images\\";
+            _tempFolder = "Images";
             _awsService = awsService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<string> GetFileURL(string id, FileType type)
-        {
-            //Your code here;
-            // throw new NotImplementedException();
-
-            string pathWeb = "";
-            pathWeb = this._environment.ContentRootPath;
-            String pathValue = "";
-            var path = "";
-            if(id != "" && type == FileType.ProfilePhoto && pathWeb != "")
-            {
-
-               pathValue = pathWeb + _tempFolder;
-               path = pathValue + id;
-               
-                Console.WriteLine(path);
-            }
-
-
-
-
-            return path;
-
-        }
-
+        //Photoupload by Kushan
         public async Task<string> SaveFile(IFormFile file, FileType type)
         {
-            //Your code here;
-            //  throw new NotImplementedException();
-
-
-            var newFileName = "";
-            string pathWeb = "";
-            pathWeb = _environment.WebRootPath;
-
-            if (file != null && type == FileType.ProfilePhoto && pathWeb != "")
+            try
             {
-                string pathValue = pathWeb + _tempFolder;
-                newFileName = $@"{DateTime.Now.Ticks}_" + file.FileName;
-                var path = pathValue + newFileName;
-                using (var fileStream = new FileStream(path, FileMode.Create))
+                var UniqueFileName = "";
+                string pathWeb = "";
+                string path = "";
+                string uploadfolder = "";
+                pathWeb = _environment.ContentRootPath;
+
+                //if (string.IsNullOrWhiteSpace(_environment.WebRootPath))
+                //{
+
+                //    _environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                //}
+
+                uploadfolder = Path.Combine(pathWeb, _tempFolder);
+                if (!Directory.Exists(uploadfolder))
                 {
-                    await file.CopyToAsync(fileStream);
+                    Directory.CreateDirectory(uploadfolder);
                 }
-                Console.WriteLine(path);
+
+                if (file != null && type == FileType.ProfilePhoto && !string.IsNullOrWhiteSpace(uploadfolder))
+                {
+                    UniqueFileName = $@"{DateTime.Now.Ticks}_" + file.FileName;
+                    path = Path.Combine(uploadfolder, UniqueFileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+
+                        // await _awsService.PutFileToS3(path, fileStream, "[Bucket name]");
+                    }
+                }
+                return UniqueFileName;
             }
-
-            return newFileName;
-
+            catch (Exception e)
+            {
+                return "";
+            }
 
         }
 
-        public async Task<bool> DeleteFile(string id, FileType type)
+        //Photoupload by Kushan
+        public async Task<string> GetFileURL(string filename, FileType type)
         {
-            //Your code here;
-            throw new NotImplementedException();
+            string path = "";
+            try
+            {
+
+                //get the url of web site
+                string myHostUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}";
+
+                if (!string.IsNullOrWhiteSpace(filename))
+                { path = Path.Combine(myHostUrl, _tempFolder, filename); }
+
+                return path;
+            }
+
+            catch
+            {
+                return path;
+            }
+        }
+
+
+        //Photoupload by Kushan
+        public async Task<bool> DeleteFile(string filename, FileType type)
+        {
+            var isdeleted = false;
+            try
+            {
+                string pathWeb = "";
+                string uploadfolder = "";
+                pathWeb = _environment.ContentRootPath;
+
+                uploadfolder = Path.Combine(pathWeb, _tempFolder);
+
+                if (Directory.Exists(uploadfolder))
+                {
+                    if (File.Exists(Path.Combine(uploadfolder, filename)))
+                    {
+                        // If file found, delete it    
+                        File.Delete(Path.Combine(uploadfolder, filename));
+                        isdeleted = true;
+                    }
+                }
+
+                return isdeleted;
+            }
+            catch (Exception e)
+            {
+                return isdeleted;
+            }
         }
 
 
@@ -91,7 +131,7 @@ namespace Talent.Common.Services
             //Your code here;
             throw new NotImplementedException();
         }
-        
+
         private async Task<bool> DeleteFileGeneral(string id, string bucket)
         {
             //Your code here;
