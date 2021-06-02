@@ -1,169 +1,176 @@
 ﻿﻿import React from 'react'
 import { SingleInput } from '../Form/SingleInput.jsx';
-import { Container, Input, Dropdown, Button, Table, Label, Icon, Grid } from 'semantic-ui-react';
-
+import { Pagination, Icon, Dropdown, Checkbox, Accordion, Form, Segment } from 'semantic-ui-react';
+import { ChildSingleInput } from '../Form/SingleInput.jsx';
+import moment from 'moment';
+const visaTypes = [
+  {
+    key: 'citizen',
+    text: 'Citizen',
+    value: 'Citizen'
+  },
+  {
+    key: 'Permanent Resident',
+    text: 'Permanent Resident',
+    value: 'Permanent Resident'
+  },
+  {
+    key: 'Work Visa',
+    text: 'Work Visa',
+    value: 'Work Visa'
+  },
+  {
+    key: 'Student Visa',
+    text: 'Student Visa',
+    value: 'Student Visa'
+  },
+]
 export default class VisaStatus extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            options: [
-                {
-                    key: 'Citizen',
-                    text: 'Citizen',
-                    value: 'Citizen'
-                },
-                {
-                    key: 'Permanent Resident',
-                    text: 'Permanent Resident',
-                    value: 'Permanent Resident'
-                },
-                {
-                    key: 'Work Visa',
-                    text: 'Work Visa',
-                    value: 'Work Visa'
-                },
-                {
-                    key: 'Student Visa',
-                    text: 'Student Visa',
-                    value: 'Student Visa'
-                }
-            ],
-            visaStatus: "",
-            visaExpiryDate: new Date(0)
+  constructor(props) {
+    super(props);
+    const details = props.details ?
+      Object.assign({}, this.props.details)
+      : {
+        visaStatus: "",
+        visaExpiryDate: ""
+      }
+    this.state = {
+      isPropsAssigned: false,
+      isVisaExpired: false,
+      newContact: details,
+      hideSave: false,
+    };
+    this.update = this.update.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.saveContact = this.saveContact.bind(this)
+    this.renderDisplay = this.renderDisplay.bind(this)
+  }
 
-        }
-        this.handleChangeVisa = this.handleChangeVisa.bind(this);
-        this.formatdate = this.formatdate.bind(this);
-        this.handleChangeDate = this.handleChangeDate.bind(this);
-        this.handleSave = this.handleSave.bind(this);
+  update() {
+    if (!this.state.isPropsAssigned) {
+      console.log("mouse Enter!!")
+      const details = Object.assign({}, this.props.details)
+      this.setState({
+        newContact: details,
+        isPropsAssigned: true,
+      })
     }
+  }
 
-    handleChangeVisa(e, { value }) {
-        this.setState({
-            visaStatus: value
-        })
+  handleChange(event) {
+    console.log("handle change event called!!!")
+    const data = Object.assign({}, this.state.newContact)
+    data[event.target.name] = event.target.value
+    this.setState({
+      newContact: data
+    })
+    if (event.target.value == "Citizen" || event.target.value == "Permanent Resident") {
+      const details = Object.assign({}, this.props.details)
+      this.setState({
+        newContact: details
+      })
+
+      const data = Object.assign({}, this.state.newContact)
+      //do not know which property user accesing so use bracket notation
+      data[event.target.name] = event.target.value
+      //access the property using bracket notation
+      data["visaExpiryDate"] = ""
+      this.setState({
+        newContact: data,
+        isVisaExpired: false
+
+      })
+      //console.log(this.state.isVisaExpired)
     }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.visaStatus !== this.props.visaStatus && prevProps.visaExpiryDate !== this.props.visaExpiryDate) {
-            this.setState({
-                visaStatus: this.props.visaStatus,
-                visaExpiryDate: this.props.visaExpiryDate
-            })
-        }
+    else {
+      const data = Object.assign({}, this.state.newContact)
+      //console.log(`Expired : ${(data.visaExpiryDate).slice(0, 10)}`)
+      data[event.target.name] = event.target.value
+      this.setState({
+        newContact: data,
+        isVisaExpired: true,
+        hideSave: true
+      })
     }
+  }
+  /*  console.log(this.state.newContact)*/
+  /* console.log(visaExpiryDate)  */
 
-    formatdate(value) {
-        let editdate = new Date(value)
-        let year = editdate.getFullYear();
-        let month = editdate.getMonth() + 1;
-        let date = editdate.getDate();
-        if (month < 10) { month = "0" + month }
-        if (date < 10) { date = "0" + date }
-        const finaldate = `${date}/${month}/${year}`;
-        return finaldate;
-    }
+  saveContact() {
+    const data = Object.assign({}, this.state.newContact)
+    //console.log(data)
+    const date = new Date().toLocaleDateString()
+    console.log(`Today : ${(date).slice(0, 10)}`)
+    const Expired = `Expired : ${(data.visaExpiryDate).slice(0, 10)}`
+    console.log(Expired)
 
-    handleChangeDate(value) {
-        let validation = value.match(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/)
-        if (validation) {
-            const dateArray = value.split(/\/|\-/);
-            const visaExpiryDate = new Date(`${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`);
-            this.setState({
-                visaExpiryDate: visaExpiryDate
-            })
-        }
-    }
-
-    handleSave(visaStatus, visaExpiryDate) {
-        //console.log(visaStatus, visaExpiryDate)
-        this.props.saveProfileData({ visaStatus: visaStatus, visaExpiryDate: visaExpiryDate })
-    }
-
-
-    render() {
-        let visaStatus = this.state.visaStatus === null ? "" : this.state.visaStatus;
-        let visaExpiryDate = this.state.visaExpiryDate === null ? new Date(0) : this.state.visaExpiryDate;
-        //console.log(visaStatus, visaExpiryDate)
-        if (visaStatus === "" || visaStatus === 'Citizen' || visaStatus === "Permanent Resident") {
-            visaExpiryDate = null
-            return (
-                <React.Fragment>
-                    <Container style={{ margin: '20px' }}>
-                        <Grid>
-                            <Grid.Row>
-                                <Grid.Column width={6}>
-                                    <h5>Visa type</h5>
-                                    <Dropdown
-                                        fluid
-                                        search
-                                        selection
-                                        options={this.state.options}
-                                        onChange={(e, data) => this.handleChangeVisa(e, data)}
-                                        placeholder="Please choose your visa status"
-                                        value={visaStatus}
-                                    >
-                                    </Dropdown>
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Button
-                                        style={{ marginTop: '32px' }}
-                                        color='teal'
-                                        onClick={() => this.handleSave(visaStatus, visaExpiryDate)}
-                                    >
-                                        Save
-                                    </Button>
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                    </Container>
-                </React.Fragment>
-            )
-        } else {
-            return (
-                <React.Fragment>
-                    <Container style={{ margin: '20px' }}>
-                        <Grid>
-                            <Grid.Row>
-                                <Grid.Column width={6}>
-                                    <h5>Visa type</h5>
-                                    <Dropdown
-                                        fluid
-                                        search
-                                        selection
-                                        options={this.state.options}
-                                        onChange={(e, data) => this.handleChangeVisa(e, data)}
-                                        value={visaStatus}
-                                    >
-                                    </Dropdown>
-                                </Grid.Column>
-                                <Grid.Column width={6}>
-                                    <h5>Visa expiry date</h5>
-                                    <Input
-                                        style={{ opacity: '1' }}
-                                        fluid
-                                        defaultValue={this.formatdate(visaExpiryDate)}
-                                        onChange={(e) => this.handleChangeDate(e.target.value)}
-                                    >
-                                    </Input>
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Button
-                                        style={{ marginTop: '32px' }}
-                                        color='teal'
-                                        onClick={() => this.handleSave(visaStatus, visaExpiryDate)}
-                                    >
-                                        Save
-                                    </Button>
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                    </Container>
-                </React.Fragment>
-            )
-        }
-
-
+    if (moment(date).isAfter(Expired)) {
+      TalentUtil.notification.show("Date InValid")
+      this.setState({
+        isVisaExpired: false,
+        hideSave: false
+      })
 
     }
+    else {
+      /*  TalentUtil.notification.show("Date valid") */
+      this.props.controlFunc(this.props.componentId, data)
+      this.setState({
+        isVisaExpired: false,
+        hideSave: false
+      })
+    }
+  }
+  render() {
+    return (
+      this.renderDisplay()
+    )
+  }
+  renderDisplay() {
+    let visaStatus = this.props.details.visaStatus
+    let VisaExpiryDate = this.props.details.visaExpiryDate ? `Expired : ${(this.props.details.visaExpiryDate).slice(0, 10)}` : ""
+    return (
+      <div className='row'>
+        <div className="ui sixteen wide column nationality" onMouseEnter={this.update}>
+          <div className="visastatus"  >
+
+            <label className="locationlabel">Visa type</label>
+
+            <select class="ui dropdown"
+              name="visaStatus"
+              onChange={this.handleChange}
+              style={{ height: "43px" }}
+            >
+              {/* <option value="" disabled defaultValue>{`${visaStatus} ${VisaExpiryDate}`}</option> */}
+              <option value="">Select Visa Type</option>
+              <option value="Citizen">Citizen</option>
+              <option value="Permanent Resident">Permanent Resident</option>
+              <option value="Work Visa">Work Visa</option>
+              <option value="Student Visa">Student Visa</option>
+            </select>
+          </div>
+          {this.state.isVisaExpired && <div className="visastatus"
+            style={{ marginTop: ".5px", verticalAlign: "top" }}
+          >
+            <SingleInput
+              inputType="date"
+              label="Visa Expiry Date"
+              name="visaExpiryDate"
+              defaultValue={VisaExpiryDate}
+              controlFunc={this.handleChange}
+            />
+
+          </div>
+          }
+          <div className="visastatus"
+
+          >
+            <button type="button" className="ui teal button" onClick={this.saveContact}>Save</button>
+          </div>
+        </div>
+        <b><label className="locationlable">Visa Status: {`${visaStatus} ${VisaExpiryDate}`}</label></b>
+      </div>
+
+    )
+  }
 }

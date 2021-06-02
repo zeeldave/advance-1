@@ -208,8 +208,7 @@ export default class AccountProfile extends React.Component {
                                             tooltip='Select languages that you speak'
                                         >
                                             <Language
-                                                languageData={this.state.profileData.languages}
-                                                updateProfileData={this.updateAndSaveData}
+                                                details={this.state.profileData}
                                             />
                                         </FormItemWrapper>
                                         <FormItemWrapper
@@ -251,10 +250,9 @@ export default class AccountProfile extends React.Component {
                                             tooltip='What is your current Visa/Citizenship status?'
                                         >
                                             <VisaStatus
-                                                visaStatus={this.state.profileData.visaStatus}
-                                                visaExpiryDate={this.state.profileData.visaExpiryDate}
-                                                updateProfileData={this.updateWithoutSave}
-                                                saveProfileData={this.updateAndSaveData}
+                                                details={this.state.profileData}
+                                                controlFunc={this.updateForComponentId}
+                                                componentId='VisaStatus'
                                             />
                                         </FormItemWrapper>
                                         <FormItemWrapper

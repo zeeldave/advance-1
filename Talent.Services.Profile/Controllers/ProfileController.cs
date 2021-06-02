@@ -208,9 +208,9 @@ namespace Talent.Services.Profile.Controllers
             // throw new NotImplementedException();
 
             String talentId = String.IsNullOrWhiteSpace(id) ? _userAppContext.CurrentUserId : id;
-            var languages = await _profileService.GetSkills(talentId);
+            var skills = await _profileService.GetSkills(talentId);
 
-            return Json(new { Success = true, data = languages });
+            return Json(new { Success = true, data = skills });
         }
 
         [HttpPost("addSkill")]
@@ -322,9 +322,9 @@ namespace Talent.Services.Profile.Controllers
             // throw new NotImplementedException();
 
             String talentId = String.IsNullOrWhiteSpace(id) ? _userAppContext.CurrentUserId : id;
-            var languages = await _profileService.GetExperience(talentId);
-
-            return Json(new { Success = true, data = languages });
+            var experiences = await _profileService.GetExperience(talentId);
+           
+            return Json(new { Success = true, data = experiences });
         }
 
         [HttpGet("getCertification")]

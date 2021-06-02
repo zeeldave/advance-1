@@ -6,6 +6,7 @@ export default class Experience extends React.Component {
     constructor(props) {
         super(props);
         const details = props.details
+        
         this.state = {
             showEditSection: false,
             IsEditMode: false,
@@ -26,7 +27,9 @@ export default class Experience extends React.Component {
         this.updateWithoutSave = this.updateWithoutSave.bind(this)
        /*  this.check = this.check.bind(this) */
         this.setDate = this.setDate.bind(this)
+
     }
+    
 
     openEdit() {
 
@@ -97,7 +100,6 @@ export default class Experience extends React.Component {
 
     onEdit(rowkey, company, position, responsibilities, start, end) {
         console.log("onEdit!!")
-        debugger;
         this.setState({
             IsEditMode: true,
             rowkey: rowkey,
@@ -122,12 +124,12 @@ export default class Experience extends React.Component {
         const End = `End : ${(this.state.experience.end).slice(0, 10)}`
         if (this.state.experience.company !== "" && this.state.experience.position !== "" && this.state.experience.responsibilities !== "" && this.state.experience.start !== "" && this.state.experience.end !== "") {
             if (moment(Start).isAfter(End)) {
-                TalentUtil.notification.show("Date InValid")
+                TalentUtil.notification.show("Date Invalid", "error", null, null)
                 console.log(Start)
                 console.log(End)
             } else {
                 $.ajax({
-                    //url: 'https://talentservicesprofile20201113.azurewebsites.net/profile/profile/updateTalentProfile',
+                    //url: 'https://talentservicesprofile20201113.azurewebsites.net/profile/profile/addExperience',
                     url: 'http://localhost:60290/profile/profile/addExperience',
                     headers: {
                         'Authorization': 'Bearer ' + cookies,
@@ -153,6 +155,7 @@ export default class Experience extends React.Component {
             TalentUtil.notification.show("Please fill all  the blanks", "error", null, null)
         }
     }
+    
 
     updateExperience() {
 
@@ -224,8 +227,8 @@ export default class Experience extends React.Component {
 
     setDate(date) {
         var dt = new Date(date);
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        var formattedDate = dt.getDate() + "th " + months[dt.getMonth()] + " " + dt.getFullYear()
+        var months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+        var formattedDate = dt.getDate() + "/" + months[dt.getMonth()] + "/" + dt.getFullYear()
         return formattedDate;
     }
 
@@ -238,6 +241,7 @@ export default class Experience extends React.Component {
     renderDisplay() {
         var today = new Date(),
             date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+           
         return (
             <div className='row'>
                 <div className="ui sixteen wide column">
@@ -326,6 +330,7 @@ export default class Experience extends React.Component {
                                                                         label="Company:"
                                                                         name="company"
                                                                         defaultValue={experience.company}
+                                                                        placeholder={experience.company}
                                                                         controlFunc={this.handleChange}
                                                                         maxLength={80}
                                                                     />
@@ -336,34 +341,40 @@ export default class Experience extends React.Component {
                                                                         label="Position:"
                                                                         name="position"
                                                                         defaultValue={experience.position}
+                                                                        placeholder={experience.position}
                                                                         controlFunc={this.handleChange}
                                                                         maxLength={80}
                                                                     />
                                                                 </div>
                                                                 <div className="companyfield" style={{ paddingTop: "10px", paddingBottom: "10px" }}>
-                                                                    <SingleInput
-                                                                        inputType="date"
-                                                                        label="Start Date:"
-                                                                        name="start"
-                                                                        defaultValue={(experience.start).slice(0, 10)}
-                                                                        controlFunc={this.handleChange}
-                                                                    />
+                                                            
+                                                                    <input 
+                                                                    type="date" 
+                                                                    defaultValue={(experience.start).slice(0, 10)}
+                                                                    label="Start Date:"
+                                                                    name="start"
+                                                                    onChange={this.handleChange}
+                                                                    ></input>
+
                                                                 </div>
                                                                 <div className="positionfield">
-                                                                    <SingleInput
-                                                                        inputType="date"
-                                                                        label="End Date:"
-                                                                        name="end"
-                                                                        defaultValue={(experience.start).slice(0, 10)}
-                                                                        controlFunc={this.handleChange}
-                                                                    />
+                                                                    
+                                                                    <input 
+                                                                    type="date" 
+                                                                    defaultValue={(experience.end).slice(0, 10)}
+                                                                    label="End Date:"
+                                                                    name="end"
+                                                                    onChange={this.handleChange}
+                                                                    ></input>
                                                                 </div>
+
                                                                 <div style={{ paddingBottom: "10px" }}>
                                                                     <ChildSingleInput
                                                                         inputType="text"
                                                                         label="Responsibilities:"
                                                                         name="responsibilities"
                                                                         defaultValue={experience.responsibilities}
+                                                                        placeholder={experience.responsibilities}
                                                                         controlFunc={this.handleChange}
                                                                         maxLength={80}
                                                                     />

@@ -109,7 +109,7 @@ export default class PhotoUpload extends Component {
                     style={{ height: 112, width: 112 }}
                     className="ui small circular image uploader"                 
                     src={this.props.details.profilePhotoUrl}          
-                    alt="loading"
+                    alt="Picture"
                     onClick={this.handleChange}
                 />;
         }
@@ -118,8 +118,8 @@ export default class PhotoUpload extends Component {
         }
         return (
                     <section>
-                        <div className="image-upload">
-                            <label id="file-input" className="profile-photo">
+                        <div class="image-upload">
+                            <label For="file-input" className="profile-photo">
                                 {showProfileImg}
                             </label> 
                             <input id="file-input" type="file" style={{ display: 'none' }} onChange={this.handleChange} accept="image/*"/>

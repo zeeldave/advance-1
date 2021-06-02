@@ -77,6 +77,11 @@ export default class Skill extends React.Component {
     handleChange(event) {
         const data = Object.assign({}, this.state.skill)
         console.log(event.target.value)
+        console.log(event.target.name)
+        data[event.target.name] = event.target.value
+        this.setState({
+            skill: data})
+
         const names = this.state.skills.map((skill) => skill.name)
         for (var i = 0; i < names.length; i++) {
             if (names[i] !== event.target.value) {
